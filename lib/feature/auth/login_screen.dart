@@ -30,11 +30,14 @@ class _LoginScreenState extends State<LoginScreen> implements AuthConnector  {
   }
 
   @override
-  void showMessage(String message,String title) {
+  void showMessage(String message,String title,String actionButtonName ) {
   DialogUtils.showMessage(context: context, message: message,
   title: title,
-  posAction: (){},
-    posActionName: "ok"
+  posAction: (){
+    if(actionButtonName == "ok"){
+    }
+  },
+    posActionName: actionButtonName
   );
   }
 

@@ -23,23 +23,23 @@ late AuthConnector authConnector;
         password: password.text,
       );
       authConnector.hideLoading();
-      authConnector.showMessage("Register Successfully","Success");
+      authConnector.showMessage("Register Successfully","Success","ok");
 
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
         authConnector.hideLoading();
-        authConnector.showMessage("invalid-credential","fail");
+        authConnector.showMessage("invalid-credential","fail",'try again');
       } else if (e.code == 'email-already-in-use') {
         authConnector.hideLoading();
-        authConnector.showMessage("email-already-in-use","fail");
+        authConnector.showMessage("email-already-in-use","fail",'try again');
       } else if (e.code == 'network-request-failed') {
         authConnector.hideLoading();
-        authConnector.showMessage("network-request-failed","fail");
+        authConnector.showMessage("network-request-failed","fail",'try again');
       }
     } catch (e) {
       authConnector.hideLoading();
-      authConnector.showMessage(e.toString(),"fail");
+      authConnector.showMessage(e.toString(),"fail",'try again');
     }
   }
 
@@ -50,19 +50,19 @@ late AuthConnector authConnector;
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailLogin.text, password: passwordLogin.text);
       authConnector.hideLoading();
-      authConnector.showMessage("Login Successfully","Success");
+      authConnector.showMessage("Login Successfully","Success","ok");
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
         authConnector.hideLoading();
-        authConnector.showMessage("invalid-credential","fail");
+        authConnector.showMessage("invalid-credential","fail",'try again');
       } else if (e.code == 'network-request-failed') {
         authConnector.hideLoading();
-        authConnector.showMessage("network-request-failed","fail");
+        authConnector.showMessage("network-request-failed","fail",'try again');
       }
     } catch (e) {
       authConnector.hideLoading();
-      authConnector.showMessage(e.toString(),"fail");
+      authConnector.showMessage(e.toString(),"fail",'try again');
     }
   }
 

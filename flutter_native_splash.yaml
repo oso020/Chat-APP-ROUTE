@@ -1,0 +1,14 @@
+flutter_native_splash:
+
+  # Android 11 and below
+  color: "#FFFFFF"
+  image: assets/images/splash.png
+  branding: assets/images/3.0x/Group 7@3x.png
+
+
+  # Android 12 and above
+  android_12:
+    image: assets/images/splash.png
+    branding: assets/images/3.0x/Group 7@3x.png
+    icon_background_color: "#FFFFFF"
+
