@@ -5,7 +5,7 @@ class Message {
   String content;
   String senderId;
   String senderName;
-  int dateTime;
+  DateTime dateTime;
 
   Message({
     this.id = "",
@@ -23,7 +23,7 @@ class Message {
           content: json["content"] as String,
           senderId: json["senderId"] as String,
           senderName: json["senderName"] as String,
-          dateTime: json["dateTime"] as int,
+          dateTime: DateTime.fromMillisecondsSinceEpoch(json["dateTime"]) as DateTime ,
         );
 
   Map<String, dynamic> toJson() {
@@ -33,7 +33,7 @@ class Message {
       "content": content,
       "senderId": senderId,
       "senderName": senderName,
-      "dateTime": dateTime,
+      "dateTime": dateTime.millisecondsSinceEpoch,
     };
   }
 }

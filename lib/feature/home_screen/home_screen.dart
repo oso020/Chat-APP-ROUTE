@@ -1,10 +1,13 @@
 import 'package:chat_app/database/database_utils.dart';
+import 'package:chat_app/feature/auth/login_screen.dart';
 import 'package:chat_app/feature/home_screen/roomItem.dart';
 import 'package:chat_app/feature/home_screen/view_model/home_screen_connector.dart';
 import 'package:chat_app/feature/home_screen/view_model/view_model.dart';
 import 'package:chat_app/feature/room_screen/room_screen.dart';
 import 'package:chat_app/model/room.dart';
+import 'package:chat_app/widget/dialog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +22,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> implements HomeScreenConnector {
+class _HomeScreenState extends State<HomeScreen>
+    implements HomeScreenConnector {
   HomeViewModel homeViewModel = HomeViewModel();
 
   @override
@@ -51,10 +55,33 @@ class _HomeScreenState extends State<HomeScreen> implements HomeScreenConnector 
               backgroundColor: Colors.transparent,
               title: Text(
                 "Chat App",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: ColorApp.whiteColor),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: ColorApp.whiteColor),
               ),
               centerTitle: true,
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      DialogUtils.showMessage(
+                          context: context,
+                          message: "Are You Sure?",
+                          title: "LogOut",
+                          posActionName: "yes",
+                      posAction: ()async{
+                           await FirebaseAuth.instance.signOut();
+                            Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false,);
+                      },
+                        negActionName: "no"
+
+                      );
+                    },
+                    icon: Icon(Icons.login,
+                    color: Colors.white,
+
+                    ))
+              ],
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.blue,

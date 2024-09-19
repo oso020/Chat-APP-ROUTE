@@ -72,7 +72,7 @@ class DialogUtils {
             style: Theme.of(context)
                 .textTheme
                 .titleLarge
-                ?.copyWith(color: ColorApp.whiteColor),
+                ?.copyWith(color: ColorApp.primaryColor,),
           )));
     }
     showDialog(
