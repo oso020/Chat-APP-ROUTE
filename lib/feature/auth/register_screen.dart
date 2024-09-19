@@ -1,11 +1,14 @@
 import 'package:chat_app/color_app.dart';
 import 'package:chat_app/feature/auth/view_model/auth_connector.dart';
 import 'package:chat_app/feature/auth/view_model/provider.dart';
+import 'package:chat_app/feature/home_screen/home_screen.dart';
+import 'package:chat_app/model/my_user.dart';
 import 'package:chat_app/widget/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/save_user.dart';
 import '../../widget/TextFieldCustom.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,7 +20,8 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> implements AuthConnector  {
+class _RegisterScreenState extends State<RegisterScreen>
+    implements AuthConnector {
   @override
   void hideLoading() {
     DialogUtils.hideLoading(context);
@@ -29,25 +33,34 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
   }
 
   @override
-  void showMessage(String message,String title,String actionButtonName) {
-  DialogUtils.showMessage(context: context, message: message,
-  title: title,
-  posAction: (){
-    if(actionButtonName == "ok"){
-    }
-  },
-    posActionName: actionButtonName
-  );
+  void showMessage(String message, String title, String actionButtonName,
+      [MyUser? user]) {
+    var userProvider=Provider.of<SaveUser>(context,listen: false);
+    userProvider.myUser=user;
+    DialogUtils.showMessage(
+        context: context,
+        message: message,
+        title: title,
+        posAction: () {
+          if (actionButtonName == "ok") {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              HomeScreen.routeName,
+              (route) => false,
+            );
+          }
+        },
+        posActionName: actionButtonName);
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    authViewModel.authConnector=this;
+    authViewModel.authConnector = this;
   }
 
-  AuthViewModel authViewModel=AuthViewModel();
+  AuthViewModel authViewModel = AuthViewModel();
   @override
   void dispose() {
     super.dispose();
@@ -57,15 +70,13 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
     authViewModel.confirmPassword.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
     return ChangeNotifierProvider<AuthViewModel>(
-      create: (context) =>authViewModel ,
+      create: (context) => authViewModel,
       child: Stack(
         children: [
           Container(
@@ -84,9 +95,10 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
               backgroundColor: Colors.transparent,
               title: Text(
                 "Create Account",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: ColorApp.whiteColor
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: ColorApp.whiteColor),
               ),
               centerTitle: true,
             ),
@@ -99,7 +111,27 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(
-                        height: height / 4,
+                        height: height / 7,
+                      ),
+                      Textfieldcustom(
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return "enter your firstName";
+                          }
+                          return null;
+                        },
+                        controller: authViewModel.firstName,
+                        lableText: "firstName",
+                      ),
+                      Textfieldcustom(
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return "enter your lastName";
+                          }
+                          return null;
+                        },
+                        controller: authViewModel.lastName,
+                        lableText: "lastName",
                       ),
                       Textfieldcustom(
                         validator: (text) {
@@ -150,10 +182,14 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
                             setState(() {});
                           },
                           icon: authViewModel.isSecure == true
-                              ? Icon(Icons.visibility_off_outlined,
-                            color: ColorApp.primaryColor,)
-                              : Icon(Icons.visibility_outlined,
-                            color: ColorApp.primaryColor,),
+                              ? Icon(
+                                  Icons.visibility_off_outlined,
+                                  color: ColorApp.primaryColor,
+                                )
+                              : Icon(
+                                  Icons.visibility_outlined,
+                                  color: ColorApp.primaryColor,
+                                ),
                         ),
                         lableText: "password",
                       ),
@@ -161,15 +197,19 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
                         obSecure: authViewModel.isSecureConfirm,
                         suffixIcon: IconButton(
                           onPressed: () {
-                            authViewModel.isSecureConfirm = !authViewModel.isSecureConfirm;
+                            authViewModel.isSecureConfirm =
+                                !authViewModel.isSecureConfirm;
                             setState(() {});
                           },
                           icon: authViewModel.isSecureConfirm == true
-                              ? Icon(Icons.visibility_off_outlined,
-                          color: ColorApp.primaryColor,
-                          )
-                              : Icon(Icons.visibility_outlined,
-                            color: ColorApp.primaryColor,),
+                              ? Icon(
+                                  Icons.visibility_off_outlined,
+                                  color: ColorApp.primaryColor,
+                                )
+                              : Icon(
+                                  Icons.visibility_outlined,
+                                  color: ColorApp.primaryColor,
+                                ),
                         ),
                         validator: (text) {
                           if (text == null || text.isEmpty) {
@@ -183,42 +223,44 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
                         controller: authViewModel.confirmPassword,
                         lableText: "confirm password",
                       ),
-
                       Container(
-                        margin: EdgeInsets.symmetric(vertical:50.h,horizontal:8.w  ),
+                        margin: EdgeInsets.symmetric(
+                            vertical: 50.h, horizontal: 8.w),
                         padding: EdgeInsets.all(20),
                         height: 50.h,
                         decoration: BoxDecoration(
-                          color: ColorApp.whiteColor    , // Background color
+                          color: ColorApp.whiteColor, // Background color
 
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5), // Shadow color with opacity
+                              color: Colors.grey.withOpacity(
+                                  0.5), // Shadow color with opacity
                               spreadRadius: 3, // Spread radius of the shadow
                               blurRadius: 2, // Blur radius of the shadow
                               offset: Offset(0, 3), // Shadow position
                             ),
-
                           ],
-
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Create Account",
-                            style: TextStyle(
-                              color: ColorApp.grayColor,
-
+                            Text(
+                              "Create Account",
+                              style: TextStyle(
+                                color: ColorApp.grayColor,
+                              ),
                             ),
-                            ),
-
-                            IconButton(onPressed: (){
-                              if (authViewModel.form.currentState!.validate()) {
-                                authViewModel.registerFirebaseAuth();
-                              }
-                            }, icon: Icon(Icons.arrow_forward,
-                            color: ColorApp.grayColor,
-                            ))
+                            IconButton(
+                                onPressed: () {
+                                  if (authViewModel.form.currentState!
+                                      .validate()) {
+                                    authViewModel.registerFirebaseAuth();
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.arrow_forward,
+                                  color: ColorApp.grayColor,
+                                ))
                           ],
                         ),
                       )
@@ -232,7 +274,4 @@ class _RegisterScreenState extends State<RegisterScreen> implements AuthConnecto
       ),
     );
   }
-
-
-
 }

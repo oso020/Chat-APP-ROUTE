@@ -2,12 +2,15 @@ import 'package:chat_app/color_app.dart';
 import 'package:chat_app/feature/auth/register_screen.dart';
 import 'package:chat_app/feature/auth/view_model/auth_connector.dart';
 import 'package:chat_app/feature/auth/view_model/provider.dart';
+import 'package:chat_app/model/my_user.dart';
+import 'package:chat_app/provider/save_user.dart';
 import 'package:chat_app/widget/dialog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/TextFieldCustom.dart';
+import '../home_screen/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = "login_screen";
@@ -30,11 +33,15 @@ class _LoginScreenState extends State<LoginScreen> implements AuthConnector  {
   }
 
   @override
-  void showMessage(String message,String title,String actionButtonName ) {
+  void showMessage(String message,String title,String actionButtonName ,[MyUser? user]) {
+    var userProvider=Provider.of<SaveUser>(context,listen: false);
+    userProvider.myUser=user;
   DialogUtils.showMessage(context: context, message: message,
   title: title,
   posAction: (){
     if(actionButtonName == "ok"){
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+
     }
   },
     posActionName: actionButtonName
