@@ -81,13 +81,13 @@ This Chat Application is a Flutter app designed for real-time messaging, allowin
 
 
 # Architecture Overview (MVVM)
-# The app follows the MVVM (Model-View-ViewModel) design pattern, ensuring a clean separation of concerns:
+- The app follows the MVVM (Model-View-ViewModel) design pattern, ensuring a clean separation of concerns:
 
-# Model: Represents the chat message and user data fetched from Firestore.
-# View: The Flutter UI screens, including chat rooms, login, and registration views.
-# ViewModel: Interacts with Firebase and Firestore, manages state with Provider, and exposes data to the views.
-# Firestore Structure
-# The Firestore database is organized as follows:
+- Model: Represents the chat message and user data fetched from Firestore.
+- View: The Flutter UI screens, including chat rooms, login, and registration views.
+- ViewModel: Interacts with Firebase and Firestore, manages state with Provider, and exposes data to the views.
+- Firestore Structure
+- The Firestore database is organized as follows:
 
 # Users Collection:
 - Fields: username, email.
